@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+}
+
+
+.position {
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-color: rgba(0,0,0,0.5);
+  color: #fff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+}
+
+#container {
+  width: 2160px;
+  height: 2160px;
+  border: 1px solid #777;
+  position: relative;
+  z-index: 99;
+}
+#container canvas, 
+#overlay {
+  position: absolute;
+  z-index: 1;
+  
+}
+
+
+</style>
+
+<span id="show_position" class="position">
+  A1-1-1 <br />
+  0 Meters
+</span>
+
+<img id="imge" src="height-maps/basrahheight.png" width="2160" height="2160" hidden>
+
+<div id="container" onmousemove="event">
+  <div id="overlay">
+    <img id="map" src="images/foolsroad.png" width="2160" height="2160">
+  </div>
+  <canvas style="border: 0px solid black" x="0" y="0" width="2160" height="2160" id="c" hidden></canvas>
+  </div>
+<span id="show_position">
+
+</span>
+
+
+
+
+
+
+<script>
+const container = document.getElementById('container');
+const position = document.getElementById("show_position");
+
+const color = document.getElementById('color');
+var rgba = 0;
+var canvas = document.getElementById("c");
+var ctx = canvas.getContext("2d");
+var img = document.getElementById("imge");
+
+ctx.drawImage(img, 0, 0, 2160, 2160);
+
+
+
+
+container.onmousemove = function(event) { 
+  var x = event.pageX;
+  var y = event.pageY;
+  var sletter = "A";
+  var snumber = "1";
+  var isnumber = "9";
+  var issnumber = "1";
+  var swidth = "365.2";
+  if (x > swidth*0 && x < swidth*1) {
+  	var sletter = "A";
+  	}
+  if (x > swidth*1 && x < swidth*2) {
+  	var sletter = "B";
+  	}
+  if (x > swidth*2 && x < swidth*3) {
+  	var sletter = "C";
+  	}
+  if (x > swidth*3 && x < swidth*4) {
+  	var sletter = "D";
+  	}
+  if (x > swidth*4 && x < swidth*5) {
+  	var sletter = "E";
+  	}
+  if (x > swidth*5 && x < swidth*6) {
+  	var sletter = "F";
+  	}
+  //End of Section Letter IF statements
+  //Star of Section Number IF statements
+  if (y > swidth*0 && y < swidth*1) {
+  	var snumber = "1";
+  	}
+  if (y > swidth*1 && y < swidth*2) {
+  	var snumber = "2";
+  	}
+  if (y > swidth*2 && y < swidth*3) {
+  	var snumber = "3";
+  	}
+  if (y > swidth*3 && y < swidth*4) {
+  	var snumber = "4";
+  	}
+  if (y > swidth*4 && y < swidth*5) {
+  	var snumber = "5";
+  	}
+  if (y > swidth*5 && y < swidth*6) {
+  	var snumber = "6";
+  	}
+//End of Section Number IF statements
+
+function getSubSectorNumber(x, y) {
+    var xRelativeToSector = x % swidth;
+    var yRelativeToSector = y % swidth;
+
+    var column = Math.floor(3 * xRelativeToSector / swidth);
+    var row = Math.floor(3 * yRelativeToSector / swidth);
+
+    return 3 * (2 - row) + column + 1;
+}
+var isnumber = getSubSectorNumber(x, y);
+
+function getSubSubSectorNumber(x, y) {
+    var xRelativeToSector = x % 121.73;
+    var yRelativeToSector = y % 121.73;
+
+    var column = Math.floor(3 * xRelativeToSector / 121.73);
+    var row = Math.floor(3 * yRelativeToSector / 121.73);
+
+    return 3 * (2 - row) + column + 1;
+}
+var issnumber = getSubSubSectorNumber(x, y);
+
+
+canvas.addEventListener("mousemove", (e) => {
+  var x = e.offsetX;
+  var y = e.offsetY;
+  var data = ctx.getImageData(x, y, 1, 1);
+  var rgba = data.data;
+});
+
+
+let r = ctx.getImageData(x, y, canvas.width, canvas.height).data[0];
+let norm = 1000 - (r * 1000 / 255);
+var fnorm = norm.toFixed(1);
+
+
+var coords = `${sletter}${snumber}-${isnumber}-${issnumber}<br /> ${fnorm} Meters`;
+
+  const offset = 10;
+  position.style.transform = `translate(${x + offset}px, ${y + offset}px)`;
+
+  position.innerHTML = coords;
+}
+
+
+</script>
+
+</html>

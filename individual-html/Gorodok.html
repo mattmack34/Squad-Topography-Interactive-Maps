@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+}
+
+
+.position {
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-color: rgba(0,0,0,0.5);
+  color: #fff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+}
+
+#container {
+  width: 2160px;
+  height: 2160px;
+  border: 1px solid #777;
+  position: relative;
+  z-index: 99;
+}
+#container canvas, 
+#overlay {
+  position: absolute;
+  z-index: 1;
+  
+}
+
+
+</style>
+
+<span id="show_position" class="position">
+  A1-1-1 <br />
+  0 Meters
+</span>
+
+<img id="imge" src="height-maps/basrahheight.png" width="2160" height="2160" hidden>
+
+<div id="container" onmousemove="event">
+  <div id="overlay">
+    <img id="map" src="images/gorodok.png" width="2160" height="2160">
+  </div>
+  <canvas style="border: 0px solid black" x="0" y="0" width="2160" height="2160" id="c" hidden></canvas>
+  </div>
+<span id="show_position">
+
+</span>
+
+
+
+
+
+
+<script>
+const container = document.getElementById('container');
+const position = document.getElementById("show_position");
+
+const color = document.getElementById('color');
+var rgba = 0;
+var canvas = document.getElementById("c");
+var ctx = canvas.getContext("2d");
+var img = document.getElementById("imge");
+
+ctx.drawImage(img, 0, 0, 2160, 2160);
+
+
+
+
+container.onmousemove = function(event) { 
+  var x = event.pageX;
+  var y = event.pageY;
+  var sletter = "A";
+  var snumber = "1";
+  var isnumber = "9";
+  var issnumber = "1";
+  var swidth = "141.2";
+  if (x > 0 && x < 141.6) {
+  	var sletter = "A";
+  	}
+  if (x > 141.6 && x < 300.8) {
+  	var sletter = "B";
+  	}
+  if (x > 300.8 && x < 460) {
+  	var sletter = "C";
+  	}
+  if (x > 460 && x < 619.2) {
+  	var sletter = "D";
+  	}
+  if (x > 619.2 && x < 778.4) {
+  	var sletter = "E";
+  	}
+  if (x > 778.4 && x < 937.6) {
+  	var sletter = "F";
+  	}
+  if (x > 937.6 && x < 1096.8) {
+  	var sletter = "G";
+  	}
+  if (x > 1096.8 && x < 1256) {
+  	var sletter = "H";
+  	}
+  if (x > 1256 && x < 1415.2) {
+  	var sletter = "I";
+  	}
+  if (x > 1415.2 && x < 1574.4) {
+  	var sletter = "J";
+  	}
+  if (x > 1574.4 && x < 1733.6) {
+  	var sletter = "K";
+  }
+  if (x > 1733.6 && x < 1892.8) {
+  	var sletter = "L";
+  }
+  if (x > 1892.8 && x < 2052) {
+  	var sletter = "M";
+  }
+  if (x > 2052) {
+  	var sletter = "N";
+  }
+  //End of Section Letter IF statements
+  //Star of Section Number IF statements
+  if (y > swidth*0 && y < swidth*1) {
+  	var snumber = "1";
+  	}
+  if (y > swidth*1 && y < swidth*2) {
+  	var snumber = "2";
+  	}
+  if (y > swidth*2 && y < swidth*3) {
+  	var snumber = "3";
+  	}
+  if (y > swidth*3 && y < swidth*4) {
+  	var snumber = "4";
+  	}
+  if (y > swidth*4 && y < swidth*5) {
+  	var snumber = "5";
+  	}
+  if (y > swidth*5 && y < swidth*6) {
+  	var snumber = "6";
+  	}
+  if (y > swidth*6 && y < swidth*7) {
+  	var snumber = "7";
+  	}
+  if (y > swidth*7 && y < swidth*8) {
+  	var snumber = "8";
+  	}
+  if (y > swidth*8 && y < swidth*9) {
+  	var snumber = "9";
+  	}
+  if (y > swidth*9 && y < swidth*10) {
+  	var snumber = "10";
+  	}
+  if (y > swidth*10 && y < swidth*11) {
+  	var snumber = "11";
+  	}
+  if (y > swidth*11 && y < swidth*12) {
+  	var snumber = "12";
+  	}
+  if (y > swidth*12 && y < swidth*13) {
+  	var snumber = "13";
+  	}
+  if (y > swidth*13 && y < swidth*14) {
+  	var snumber = "14";
+  	}
+//End of Section Number IF statements
+
+function getSubSectorNumber(x, y) {
+    var xRelativeToSector = x % swidth;
+    var yRelativeToSector = y % swidth;
+
+    var column = Math.floor(3 * xRelativeToSector / swidth);
+    var row = Math.floor(3 * yRelativeToSector / swidth);
+
+    return 3 * (2 - row) + column + 1;
+}
+var isnumber = getSubSectorNumber(x, y);
+
+function getSubSubSectorNumber(x, y) {
+    var xRelativeToSector = x % 47.06;
+    var yRelativeToSector = y % 47.06;
+
+    var column = Math.floor(3 * xRelativeToSector / 47.06);
+    var row = Math.floor(3 * yRelativeToSector / 47.06);
+
+    return 3 * (2 - row) + column + 1;
+}
+var issnumber = getSubSubSectorNumber(x, y);
+
+
+canvas.addEventListener("mousemove", (e) => {
+  var x = e.offsetX;
+  var y = e.offsetY;
+  var data = ctx.getImageData(x, y, 1, 1);
+  var rgba = data.data;
+});
+
+
+let r = ctx.getImageData(x, y, canvas.width, canvas.height).data[0];
+let norm = 1000 - (r * 1000 / 255);
+var fnorm = norm.toFixed(1);
+
+
+var coords = `${sletter}${snumber}-${isnumber}-${issnumber}<br /> ${fnorm} Meters`;
+
+  const offset = 10;
+  position.style.transform = `translate(${x + offset}px, ${y + offset}px)`;
+
+  position.innerHTML = coords;
+}
+
+
+</script>
+
+</html>
